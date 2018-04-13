@@ -22,11 +22,13 @@ import android.widget.Toast;
 import com.example.sagar.moviedb1.adapters.MovieRecyclerAdapter;
 import com.example.sagar.moviedb1.adapters.TvRecyclerAdapter;
 import com.example.sagar.moviedb1.model.Movie;
+import com.example.sagar.moviedb1.model.MovieDbDatabase;
 import com.example.sagar.moviedb1.model.Tv;
 import com.example.sagar.moviedb1.responses.MovieResponse;
 import com.example.sagar.moviedb1.responses.TvResponse;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,6 +38,7 @@ public class PopularTv extends Fragment implements TvRecyclerAdapter.onItemClick
 
     View view;
     RecyclerView recyclerView;
+    List<Tv> DbTvSeries=new ArrayList<>();
     ProgressBar progressBar;
     TvRecyclerAdapter movieRecyclerAdapter;
     ArrayList<Tv> Movies = new ArrayList<>();
@@ -46,9 +49,10 @@ public class PopularTv extends Fragment implements TvRecyclerAdapter.onItemClick
         view = inflater.inflate(R.layout.activity_popular_tv, container, false);
         recyclerView=view.findViewById(R.id.recyclerViewTv);
         movieRecyclerAdapter=new TvRecyclerAdapter(view.getContext(),Movies,this);
-        progressBar=view.findViewById(R.id.progressbarTv);
+       progressBar=view.findViewById(R.id.progressbarTv);
+        MainActivity.check=1;
         fetchMovies();
-        progressBar.setVisibility(View.VISIBLE);
+       progressBar.setVisibility(View.VISIBLE);
         recyclerView.setAdapter(movieRecyclerAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.HORIZONTAL,false));
         recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(),DividerItemDecoration.VERTICAL));
@@ -57,15 +61,21 @@ public class PopularTv extends Fragment implements TvRecyclerAdapter.onItemClick
     }
     private void fetchMovies()
     {
+        DbTvSeries= MovieDbDatabase.getINSTANCE(view.getContext()).getTvDAO().getAllTvseries();
+        if(DbTvSeries!=null) {
+            Movies.addAll(DbTvSeries);
+            movieRecyclerAdapter.notifyDataSetChanged();
+        }
         Call<TvResponse> call=ApiClient.getInstance().getMovieDbAPI().getTv();
         call.enqueue(new Callback<TvResponse>() {
             @Override
             public void onResponse(@NonNull Call<TvResponse> call, @NonNull Response<TvResponse> response) {
                 TvResponse movies=response.body();
-                progressBar.setVisibility(View.GONE);
+               progressBar.setVisibility(View.GONE);
                 if(movies!=null) {
                     Movies.clear();
                     Movies.addAll(movies.getResults());
+                    MovieDbDatabase.getINSTANCE(view.getContext()).getTvDAO().insertTv(Movies);
                     movieRecyclerAdapter.notifyDataSetChanged();
                 }
             }
@@ -73,8 +83,8 @@ public class PopularTv extends Fragment implements TvRecyclerAdapter.onItemClick
             @Override
             public void onFailure(@NonNull Call<TvResponse> call, @NonNull Throwable t) {
                 Log.d("error", t.getMessage());
-                progressBar.setVisibility(View.GONE);
-                Toast.makeText(view.getContext(),"No Connection",Toast.LENGTH_LONG).show();
+        //        progressBar.setVisibility(View.GONE);
+                Toast.makeText(view.getContext(),"No Internet Connection",Toast.LENGTH_LONG).show();
             }
         });
     }

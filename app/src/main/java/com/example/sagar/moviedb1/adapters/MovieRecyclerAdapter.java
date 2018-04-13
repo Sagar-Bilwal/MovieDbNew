@@ -34,8 +34,10 @@ public class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieRecyclerAdap
         this.listener = listener;
     }
     @Override
-    public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MovieViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    {
         LayoutInflater layoutInflater=(LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        assert layoutInflater != null;
         View view=layoutInflater.inflate(R.layout.row_movie,parent,false);
         MovieViewHolder viewHolder=new MovieViewHolder(view);
         return viewHolder;
@@ -52,6 +54,14 @@ public class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieRecyclerAdap
             @Override
             public void onClick(View v) {
                 listener.onClick(holder.getAdapterPosition());
+
+            }
+        });
+        holder.poster.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onClick(holder.getAdapterPosition());
+
             }
         });
         Picasso.get().load("http://image.tmdb.org/t/p/w780"+movie.getPoster_path()).into(holder.poster);

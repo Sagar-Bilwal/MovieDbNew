@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/popularMovies"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context="com.example.sagar.moviedb1.PopularMovies"
     android:background="@android:color/white">
 
@@ -12,10 +14,9 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/recyclerView">
-
-
-    </android.support.v7.widget.RecyclerView>
+        android:focusableInTouchMode="true"
+        android:focusable="true"
+        android:id="@+id/recyclerView"/>
 
     <ProgressBar
         android:id="@+id/progressbar"

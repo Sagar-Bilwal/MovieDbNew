@@ -1,18 +1,30 @@
 package com.example.sagar.moviedb1.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
+
+import java.security.Key;
+
 /**
  * Created by SAGAR on 08-04-2018.
  */
-
+@Entity(tableName = "Movie")
 public class Movie
 {
     private double vote_average;
     private String title;
     private String poster_path;
     private String overview;
+    @PrimaryKey
+    @NonNull
     private int id;
 
-    public Movie(int vote_average, String title, String poster_path, String overview , int id) {
+    public Movie()
+    {
+
+    }
+    public Movie(double vote_average, String title, String poster_path, String overview , int id) {
         this.vote_average = vote_average;
         this.title = title;
         this.poster_path = poster_path;

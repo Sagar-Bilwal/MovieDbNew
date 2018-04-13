@@ -3,6 +3,7 @@ package com.example.sagar.moviedb1;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -11,8 +12,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.sagar.moviedb1.adapters.MovieRecyclerAdapter;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static int check=0;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -38,6 +44,23 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.refresh, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==R.menu.refresh)
+        {
+            Toast.makeText(this,"Menu Clicked",Toast.LENGTH_LONG).show();
+            if(check==0)
+            {
+                loadFragment(new PopularTv());
+            }
+            else if(check==1)
+            {
+                loadFragment(new PopularMovies());
+            }
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

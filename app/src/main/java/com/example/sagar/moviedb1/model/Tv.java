@@ -1,18 +1,28 @@
 package com.example.sagar.moviedb1.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by SAGAR on 09-04-2018.
  */
-
+@Entity(tableName = "Series")
 public class Tv
 {
+    public Tv()
+    {
+
+    }
     private double vote_average;
     @SerializedName("name")
     private String title;
     private String poster_path;
     private String overview;
+    @PrimaryKey
+    @NonNull
     private int id;
 
     public Tv(int vote_average, String title, String poster_path, String overview , int id) {

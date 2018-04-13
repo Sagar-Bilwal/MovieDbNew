@@ -20,9 +20,11 @@ import android.widget.Toast;
 
 import com.example.sagar.moviedb1.adapters.MovieRecyclerAdapter;
 import com.example.sagar.moviedb1.model.Movie;
+import com.example.sagar.moviedb1.model.MovieDbDatabase;
 import com.example.sagar.moviedb1.responses.MovieResponse;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,14 +40,16 @@ public class PopularMovies extends Fragment implements MovieRecyclerAdapter.onIt
     ProgressBar progressBar;
     MovieRecyclerAdapter movieRecyclerAdapter;
     ArrayList<Movie> Movies = new ArrayList<>();
+    List<Movie> DbMovies=new ArrayList<>();
     public String MOVIE_ID="MOVIE_ID";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         view = inflater.inflate(R.layout.popular_movies, container, false);
         recyclerView=view.findViewById(R.id.recyclerView);
-        movieRecyclerAdapter=new MovieRecyclerAdapter(view.getContext(),Movies,this);
+        movieRecyclerAdapter=new MovieRecyclerAdapter(view.getContext(), Movies,this);
         progressBar=view.findViewById(R.id.progressbar);
+        MainActivity.check=0;
         fetchMovies();
         progressBar.setVisibility(View.VISIBLE);
         recyclerView.setAdapter(movieRecyclerAdapter);
@@ -56,15 +60,21 @@ public class PopularMovies extends Fragment implements MovieRecyclerAdapter.onIt
     }
     public void fetchMovies()
     {
+        DbMovies=MovieDbDatabase.getINSTANCE(view.getContext()).getMovieDAO().getAllMovies();
+        if(DbMovies!=null) {
+            Movies.addAll(DbMovies);
+            movieRecyclerAdapter.notifyDataSetChanged();
+        }
         Call<MovieResponse> call=ApiClient.getInstance().getMovieDbAPI().getMovies() ;
         call.enqueue(new Callback<MovieResponse>() {
             @Override
             public void onResponse(@NonNull Call<MovieResponse> call, @NonNull Response<MovieResponse> response) {
                 MovieResponse movies=response.body();
-                progressBar.setVisibility(View.GONE);
+              progressBar.setVisibility(View.GONE);
                 if(movies!=null) {
                     Movies.clear();
                     Movies.addAll(movies.getResults());
+                    MovieDbDatabase.getINSTANCE(view.getContext()).getMovieDAO().insertMovies(Movies);
                     movieRecyclerAdapter.notifyDataSetChanged();
                 }
             }
