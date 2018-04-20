@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
                     loadFragment(new PopularTv());
                     return true;
                 case R.id.navigation_notifications:
+                    loadFragment(new Profile());
                     return true;
             }
             return false;

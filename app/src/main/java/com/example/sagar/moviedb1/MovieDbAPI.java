@@ -1,8 +1,10 @@
 package com.example.sagar.moviedb1;
 
+import com.example.sagar.moviedb1.model.Recommended;
 import com.example.sagar.moviedb1.model.Tv;
 import com.example.sagar.moviedb1.responses.CrewResponse;
 import com.example.sagar.moviedb1.responses.MovieResponse;
+import com.example.sagar.moviedb1.responses.RecommendedResponse;
 import com.example.sagar.moviedb1.responses.ReviewResponse;
 import com.example.sagar.moviedb1.responses.TvResponse;
 
@@ -25,4 +27,6 @@ public interface MovieDbAPI
     Call<TvResponse> getTv();
     @GET("/3/movie/{MOVIE_ID}/credits?api_key=d7736b944015d9ad77241f6761abe09a")
     Call<CrewResponse> getCrew(@Path("MOVIE_ID") String MOVIE_ID);
+    @GET("/3/movie/{MOVIE_ID}/similar?api_key=d7736b944015d9ad77241f6761")
+    Call<RecommendedResponse> getRecommended(@Path("MOVIE_ID") String MOVIE_ID);
 }

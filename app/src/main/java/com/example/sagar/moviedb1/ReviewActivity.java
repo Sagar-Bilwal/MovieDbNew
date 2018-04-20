@@ -16,11 +16,14 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.sagar.moviedb1.adapters.CrewRecyclerAdapter;
+import com.example.sagar.moviedb1.adapters.RecommendedRecyclerAdapter;
 import com.example.sagar.moviedb1.adapters.ReviewRecyclerAdapter;
 import com.example.sagar.moviedb1.model.Config;
 import com.example.sagar.moviedb1.model.Crew;
+import com.example.sagar.moviedb1.model.Recommended;
 import com.example.sagar.moviedb1.model.Review;
 import com.example.sagar.moviedb1.responses.CrewResponse;
+import com.example.sagar.moviedb1.responses.RecommendedResponse;
 import com.example.sagar.moviedb1.responses.ReviewResponse;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
@@ -37,9 +40,14 @@ public class ReviewActivity extends YouTubeBaseActivity implements YouTubePlayer
 
     private static final int RECOVERY_REQUEST = 1;
     CrewRecyclerAdapter crewRecyclerAdapter;
+    RecommendedRecyclerAdapter recommendedRecyclerAdapter;
+
+
     ArrayList<Crew> Crews=new ArrayList<>();
+    ArrayList<Recommended> Recommends=new ArrayList<>();
     private YouTubePlayerView youTubeView;
     RecyclerView recyclerView;
+    RecyclerView recommendedRecyclerView;
     Intent intent;
     Bundle bundle;
     String movieId;
@@ -51,15 +59,30 @@ public class ReviewActivity extends YouTubeBaseActivity implements YouTubePlayer
         setContentView(R.layout.activity_review);
         intent =getIntent();
         crewRecyclerAdapter=new CrewRecyclerAdapter(Crews,this);
+        recommendedRecyclerAdapter=new RecommendedRecyclerAdapter(Recommends,this);
         bundle=intent.getExtras();
         assert bundle != null;
         movieId=bundle.getString("MOVIE_ID","");
+
+
         fetchCrews();
+
+
         recyclerView=findViewById(R.id.crew_recyclerView);
         recyclerView.setAdapter(crewRecyclerAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
         recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        fetchRecommendations();
+
+        recommendedRecyclerView=findViewById(R.id.recommended_recyclerView);
+        recommendedRecyclerView.setAdapter(recommendedRecyclerAdapter);
+        recommendedRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        recommendedRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        recommendedRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+
         youTubeView = (YouTubePlayerView) findViewById(R.id.youtube_view);
         youTubeView.initialize(Config.YOUTUBE_API_KEY, this);
     }
@@ -80,6 +103,28 @@ public class ReviewActivity extends YouTubeBaseActivity implements YouTubePlayer
 
             @Override
             public void onFailure(@NonNull Call<CrewResponse> call, @NonNull Throwable t) {
+                Log.d("error", t.getMessage());
+                Toast.makeText(ReviewActivity.this,"No Connection",Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public void fetchRecommendations()
+    {
+        Call<RecommendedResponse> call=ApiClient.getInstance().getMovieDbAPI().getRecommended(movieId) ;
+        call.enqueue(new Callback<RecommendedResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<RecommendedResponse> call, @NonNull Response<RecommendedResponse> response) {
+                RecommendedResponse recommends=response.body();
+                if(recommends!=null) {
+                    Recommends.clear();
+                    Recommends.addAll(recommends.getResults());
+                    recommendedRecyclerAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<RecommendedResponse> call, @NonNull Throwable t) {
                 Log.d("error", t.getMessage());
                 Toast.makeText(ReviewActivity.this,"No Connection",Toast.LENGTH_LONG).show();
             }
