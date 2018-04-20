@@ -97,7 +97,6 @@ public class PopularMovies extends Fragment implements MovieRecyclerAdapter.onIt
     public void onClick(int position) {
         fetchReview(position);
         int movie_id=Movies.get(position).getId();
-        Toast.makeText(view.getContext(),""+movie_id,Toast.LENGTH_LONG).show();
         Intent intent= new Intent(view.getContext(),ReviewActivity.class);
         Bundle bundle=new Bundle();
         if(Reviews.size()!=0) {
@@ -113,6 +112,14 @@ public class PopularMovies extends Fragment implements MovieRecyclerAdapter.onIt
             Toast.makeText(view.getContext(),"Click Again",Toast.LENGTH_LONG).show();
         }
     }
+
+    @Override
+    public boolean onLongClick(int position)
+    {
+        Toast.makeText(view.getContext(),Movies.get(position).getTitle()+" is Added to your Favourites",Toast.LENGTH_LONG).show();
+        return true;
+    }
+
     private void fetchReview(int position)
     {
         int movie_id=Movies.get(position).getId();

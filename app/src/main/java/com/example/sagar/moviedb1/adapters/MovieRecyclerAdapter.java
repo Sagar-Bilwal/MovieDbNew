@@ -23,6 +23,7 @@ public class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieRecyclerAdap
     public interface onItemClickListener
     {
         void onClick(int position);
+        boolean onLongClick(int position);
     }
     ArrayList<Movie> movies;
     Context context;
@@ -62,6 +63,13 @@ public class MovieRecyclerAdapter extends RecyclerView.Adapter<MovieRecyclerAdap
             public void onClick(View v) {
                 listener.onClick(holder.getAdapterPosition());
 
+            }
+        });
+        holder.poster.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                listener.onLongClick(holder.getAdapterPosition());
+                return true;
             }
         });
         Picasso.get().load("http://image.tmdb.org/t/p/w780"+movie.getPoster_path()).into(holder.poster);
