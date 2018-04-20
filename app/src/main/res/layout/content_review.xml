@@ -3,37 +3,38 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:id="@+id/crew_layout"
-    android:background="@color/backgroundBlack">
+    android:background="@color/backgroundBlack"
+    android:gravity="center">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/circle_image_view"
+        android:id="@+id/crew_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
         app:civ_border_color="#FFFFFF"
         app:civ_border_width="2dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/crew_name"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:hint="Actor Namw"
-        android:textColor="@android:color/white"
+        android:gravity="center"
         android:padding="4dp"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/circle_image_view" />
+        android:paddingLeft="3dp"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/crew_image"
+        app:layout_constraintStart_toStartOf="@+id/crew_image"
+        app:layout_constraintTop_toBottomOf="@+id/crew_image" />
 </android.support.constraint.ConstraintLayout>

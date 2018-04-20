@@ -15,9 +15,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.sagar.moviedb1.adapters.CrewRecyclerAdapter;
 import com.example.sagar.moviedb1.adapters.ReviewRecyclerAdapter;
 import com.example.sagar.moviedb1.model.Config;
+import com.example.sagar.moviedb1.model.Crew;
 import com.example.sagar.moviedb1.model.Review;
+import com.example.sagar.moviedb1.responses.CrewResponse;
 import com.example.sagar.moviedb1.responses.ReviewResponse;
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
@@ -33,7 +36,10 @@ import retrofit2.Response;
 public class ReviewActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
 
     private static final int RECOVERY_REQUEST = 1;
+    CrewRecyclerAdapter crewRecyclerAdapter;
+    ArrayList<Crew> Crews=new ArrayList<>();
     private YouTubePlayerView youTubeView;
+    RecyclerView recyclerView;
     Intent intent;
     Bundle bundle;
     String movieId;
@@ -44,11 +50,40 @@ public class ReviewActivity extends YouTubeBaseActivity implements YouTubePlayer
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
         intent =getIntent();
+        crewRecyclerAdapter=new CrewRecyclerAdapter(Crews,this);
         bundle=intent.getExtras();
         assert bundle != null;
         movieId=bundle.getString("MOVIE_ID","");
+        fetchCrews();
+        recyclerView=findViewById(R.id.crew_recyclerView);
+        recyclerView.setAdapter(crewRecyclerAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
         youTubeView = (YouTubePlayerView) findViewById(R.id.youtube_view);
         youTubeView.initialize(Config.YOUTUBE_API_KEY, this);
+    }
+
+    public void fetchCrews()
+    {
+        Call<CrewResponse> call=ApiClient.getInstance().getMovieDbAPI().getCrew(movieId) ;
+        call.enqueue(new Callback<CrewResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<CrewResponse> call, @NonNull Response<CrewResponse> response) {
+                CrewResponse crews=response.body();
+                if(crews!=null) {
+                    Crews.clear();
+                    Crews.addAll(crews.getCast());
+                    crewRecyclerAdapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<CrewResponse> call, @NonNull Throwable t) {
+                Log.d("error", t.getMessage());
+                Toast.makeText(ReviewActivity.this,"No Connection",Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
