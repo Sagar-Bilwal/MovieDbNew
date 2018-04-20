@@ -30,6 +30,8 @@ dependencies {
     implementation 'com.facebook.android:facebook-login:[4,5)'
     implementation 'com.squareup.picasso:picasso:2.71828'
     testImplementation 'junit:junit:4.12'
+    implementation files('libs/YouTubeAndroidPlayerApi.jar')
+    implementation 'de.hdodenhof:circleimageview:2.1.0'
     implementation 'com.android.support:design:26.1.0'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'

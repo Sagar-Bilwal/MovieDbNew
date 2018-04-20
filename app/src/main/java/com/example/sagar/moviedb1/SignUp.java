@@ -28,7 +28,7 @@ public class SignUp extends AppCompatActivity {
         name=findViewById(R.id.upName);
         password=findViewById(R.id.upPassword);
         signUp=findViewById(R.id.buttonSignUp);
-        final FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance();
+        FirebaseDatabase firebaseDatabase=FirebaseDatabase.getInstance();
         final DatabaseReference databaseReference=firebaseDatabase.getReference("User");
 
         signUp.setOnClickListener(new View.OnClickListener() {

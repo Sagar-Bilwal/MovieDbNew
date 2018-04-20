@@ -3,7 +3,6 @@
     package="com.example.sagar.moviedb1">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -53,6 +52,11 @@
         <activity
             android:name=".PopularTv"
             android:label="@string/title_activity_popular_tv"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Profile" />
+        <activity
+            android:name=".Main2Activity"
+            android:label="@string/title_activity_main2"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

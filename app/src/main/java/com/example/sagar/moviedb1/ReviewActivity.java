@@ -16,8 +16,13 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.sagar.moviedb1.adapters.ReviewRecyclerAdapter;
+import com.example.sagar.moviedb1.model.Config;
 import com.example.sagar.moviedb1.model.Review;
 import com.example.sagar.moviedb1.responses.ReviewResponse;
+import com.google.android.youtube.player.YouTubeBaseActivity;
+import com.google.android.youtube.player.YouTubeInitializationResult;
+import com.google.android.youtube.player.YouTubePlayer;
+import com.google.android.youtube.player.YouTubePlayerView;
 
 import java.util.ArrayList;
 
@@ -25,54 +30,59 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ReviewActivity extends AppCompatActivity {
+public class ReviewActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener {
 
-    RecyclerView recyclerView;
-    ReviewRecyclerAdapter reviewRecyclerAdapter;
-    ArrayList<Review> Reviews=new ArrayList<>();
+    private static final int RECOVERY_REQUEST = 1;
+    private YouTubePlayerView youTubeView;
     Intent intent;
     Bundle bundle;
-    int movieId;
+    String movieId;
+    private YouTubePlayer youTubePlayer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
-        Toolbar toolbar =  findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         intent =getIntent();
         bundle=intent.getExtras();
         assert bundle != null;
-        movieId=bundle.getInt("MOVIE_ID",0);
-        reviewRecyclerAdapter=new ReviewRecyclerAdapter(this,Reviews);
-        recyclerView=findViewById(R.id.ReviewRecyclerView);
-        fetchReview();
-        recyclerView.setAdapter(reviewRecyclerAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
-        recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.HORIZONTAL));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        movieId=bundle.getString("MOVIE_ID","");
+        youTubeView = (YouTubePlayerView) findViewById(R.id.youtube_view);
+        youTubeView.initialize(Config.YOUTUBE_API_KEY, this);
     }
 
-    private void fetchReview()
-    {
-        String urlMovieId=movieId+"";
-        Call<ReviewResponse> call=ApiClient.getInstance().getMovieDbAPI().getReviews(urlMovieId) ;
-        call.enqueue(new Callback<ReviewResponse>() {
-            @Override
-            public void onResponse(@NonNull Call<ReviewResponse> call, @NonNull Response<ReviewResponse> response) {
-                ReviewResponse reviews=response.body();
-                if(reviews!=null) {
-                    Reviews.clear();
-                    Reviews.addAll(reviews.getResults());
-                    reviewRecyclerAdapter.notifyDataSetChanged();
-                }
+    @Override
+    public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer player, boolean wasRestored) {
+        if (!wasRestored) {
+            if(youTubePlayer==null)
+            {
+                youTubePlayer=player;
             }
+            youTubePlayer.loadVideo(movieId);
+            youTubePlayer.play();
+        }
+    }
 
-            @Override
-            public void onFailure(@NonNull Call<ReviewResponse> call, @NonNull Throwable t) {
-                Log.d("error", t.getMessage());
-                Toast.makeText(ReviewActivity.this,"No Connection",Toast.LENGTH_LONG).show();
-            }
-        });
+    @Override
+    public void onInitializationFailure(YouTubePlayer.Provider provider, YouTubeInitializationResult errorReason) {
+        if (errorReason.isUserRecoverableError()) {
+            errorReason.getErrorDialog(this, RECOVERY_REQUEST).show();
+        } else {
+            String error = String.format(getString(R.string.player_error), errorReason.toString());
+            Toast.makeText(this, error, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == RECOVERY_REQUEST) {
+            // Retry initialization if user performed a recovery action
+            getYouTubePlayerProvider().initialize(Config.YOUTUBE_API_KEY, this);
+        }
+    }
+
+    protected YouTubePlayer.Provider getYouTubePlayerProvider() {
+        return youTubeView;
     }
 }
 

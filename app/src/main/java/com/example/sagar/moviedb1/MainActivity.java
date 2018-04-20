@@ -27,13 +27,14 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
+                    check=0;
                     loadFragment(new PopularMovies());
                     return true;
                 case R.id.navigation_dashboard:
+                    check=1;
                     loadFragment(new PopularTv());
                     return true;
                 case R.id.navigation_notifications:
-
                     return true;
             }
             return false;

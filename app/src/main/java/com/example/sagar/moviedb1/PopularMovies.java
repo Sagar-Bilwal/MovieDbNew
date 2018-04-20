@@ -21,7 +21,9 @@ import android.widget.Toast;
 import com.example.sagar.moviedb1.adapters.MovieRecyclerAdapter;
 import com.example.sagar.moviedb1.model.Movie;
 import com.example.sagar.moviedb1.model.MovieDbDatabase;
+import com.example.sagar.moviedb1.model.Review;
 import com.example.sagar.moviedb1.responses.MovieResponse;
+import com.example.sagar.moviedb1.responses.ReviewResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +44,8 @@ public class PopularMovies extends Fragment implements MovieRecyclerAdapter.onIt
     ArrayList<Movie> Movies = new ArrayList<>();
     List<Movie> DbMovies=new ArrayList<>();
     public String MOVIE_ID="MOVIE_ID";
+    int check=0;
+    ArrayList<Review> Reviews=new ArrayList<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
@@ -70,7 +74,7 @@ public class PopularMovies extends Fragment implements MovieRecyclerAdapter.onIt
             @Override
             public void onResponse(@NonNull Call<MovieResponse> call, @NonNull Response<MovieResponse> response) {
                 MovieResponse movies=response.body();
-              progressBar.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
                 if(movies!=null) {
                     Movies.clear();
                     Movies.addAll(movies.getResults());
@@ -91,12 +95,44 @@ public class PopularMovies extends Fragment implements MovieRecyclerAdapter.onIt
 
     @Override
     public void onClick(int position) {
+        fetchReview(position);
         int movie_id=Movies.get(position).getId();
-        Toast.makeText(view.getContext(),(movie_id+""),Toast.LENGTH_LONG).show();
         Intent intent= new Intent(view.getContext(),ReviewActivity.class);
         Bundle bundle=new Bundle();
-        bundle.putInt(MOVIE_ID,movie_id);
-        intent.putExtras(bundle);
-        startActivity(intent);
+        if(Reviews.size()!=0) {
+            if(check==1) {
+                bundle.putString(MOVIE_ID, Reviews.get(0).getKey());
+                check=0;
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        }
+        else
+        {
+            Toast.makeText(view.getContext(),"Click Again",Toast.LENGTH_LONG).show();
+        }
+    }
+    private void fetchReview(int position)
+    {
+        int movie_id=Movies.get(position).getId();
+        String urlMovieId=movie_id+"";
+        Call<ReviewResponse> call=ApiClient.getInstance().getMovieDbAPI().getReviews(urlMovieId) ;
+        call.enqueue(new Callback<ReviewResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<ReviewResponse> call, @NonNull Response<ReviewResponse> response) {
+                ReviewResponse reviews=response.body();
+                if(reviews!=null) {
+                    Reviews.clear();
+                    check=1;
+                    Reviews.addAll(reviews.getResults());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ReviewResponse> call, @NonNull Throwable t) {
+                Log.d("error", t.getMessage());
+                Toast.makeText(view.getContext(),"No Connection",Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

@@ -5,61 +5,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/crew_layout"
     android:background="@color/backgroundBlack">
 
-
-    <TextView
-        android:id="@+id/author"
-        android:layout_width="123dp"
-        android:layout_height="44dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:padding="2dp"
-        android:text="@string/written_by"
-        android:textColor="@color/cardview_light_background"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.032"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/authorName"
-        android:layout_width="236dp"
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/circle_image_view"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:hint="@string/author"
-        android:maxLines="20"
-        android:padding="2dp"
-        android:textColor="@color/cardview_light_background"
-        android:textSize="20sp"
-        android:textStyle="italic"
+        app:civ_border_color="#FFFFFF"
+        app:civ_border_width="2dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/author"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/review"
-        android:layout_width="match_parent"
+        android:id="@+id/crew_name"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:gravity="center"
-        android:hint="@string/review"
-        android:maxLines="30"
-        android:textAllCaps="false"
-        android:textColor="@color/cardview_light_background"
+        android:layout_marginTop="16dp"
+        android:hint="Actor Namw"
+        android:textColor="@android:color/white"
+        android:padding="4dp"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/authorName" />
+        app:layout_constraintTop_toBottomOf="@+id/circle_image_view" />
 </android.support.constraint.ConstraintLayout>

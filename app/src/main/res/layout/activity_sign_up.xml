@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.sagar.moviedb1.SignIn"
+    tools:context="com.example.sagar.moviedb1.SignUp"
     android:background="@drawable/gradient">
 
     <com.rengwuxian.materialedittext.MaterialEditText

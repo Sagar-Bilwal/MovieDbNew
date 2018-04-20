@@ -52,10 +52,9 @@ public class SignIn extends AppCompatActivity {
                             User user = dataSnapshot.child(phoneNo.getText().toString()).getValue(User.class);
                             assert user != null;
                             if (user.getPassword().equals(password.getText().toString())) {
-                                SharedPreferences login=getSharedPreferences(Login.Login,MODE_PRIVATE);
-                                login.edit().putBoolean(Login.ISLOGIN,true).apply();
+                                SharedPreferences login=getSharedPreferences(CONSTANTS.Login,MODE_PRIVATE);
+                                login.edit().putBoolean(CONSTANTS.ISLOGIN,true).apply();
                                 Toast.makeText(SignIn.this, "Signed In Successfully", Toast.LENGTH_LONG).show();
-                                Toast.makeText(SignIn.this, ""+Login.ISLOGIN, Toast.LENGTH_LONG).show();
                                 SharedPreferences sharedPreferences=getSharedPreferences(SIGNIN,MODE_PRIVATE);
                                 sharedPreferences.edit().putString(NAME,user.getName()).apply();
                                 sharedPreferences.edit().putString(PHONENO,phoneNo.getText().toString()).apply();

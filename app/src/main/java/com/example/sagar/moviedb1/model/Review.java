@@ -8,28 +8,18 @@ import com.google.gson.annotations.SerializedName;
 
 public class Review
 {
-    private String author;
-    @SerializedName("content")
-    private String review;
+    private String key;
 
-    public Review(String author, String review) {
-        this.author = author;
-        this.review = review;
+    public Review(String key) {
+        this.key = key;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getKey() {
+        return key;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public void setKey(String key) {
+        this.key = key;
     }
 
-    public String getReview() {
-        return review;
-    }
-
-    public void setReview(String review) {
-        this.review = review;
-    }
 }

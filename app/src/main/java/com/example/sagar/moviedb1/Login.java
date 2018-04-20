@@ -23,16 +23,13 @@ public class Login extends AppCompatActivity {
     TextView slogan;
     LoginButton loginButton;
     CallbackManager callbackManager;
-    public static final String ISLOGIN ="ISLOGIN";
-    public static final String Login="LOGIN";
-    private static final String EMAIL = "EMAIL";
     public static boolean isLogin;
     SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        sharedPreferences = getSharedPreferences(Login, MODE_PRIVATE);
-        isLogin = sharedPreferences.getBoolean(ISLOGIN, false);
+        sharedPreferences = getSharedPreferences(CONSTANTS.Login, MODE_PRIVATE);
+        isLogin = sharedPreferences.getBoolean(CONSTANTS.ISLOGIN, false);
         if (isLogin) {
             Intent i = new Intent(Login.this, MainActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -45,11 +42,11 @@ public class Login extends AppCompatActivity {
             slogan = findViewById(R.id.slogan);
             callbackManager = CallbackManager.Factory.create();
             loginButton = findViewById(R.id.login_button);
-            loginButton.setReadPermissions(Arrays.asList(EMAIL));
+            loginButton.setReadPermissions(Arrays.asList(CONSTANTS.EMAIL));
             loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                 @Override
                 public void onSuccess(LoginResult loginResult) {
-                    sharedPreferences.edit().putBoolean(ISLOGIN, true).apply();
+                    sharedPreferences.edit().putBoolean(CONSTANTS.ISLOGIN, true).apply();
                     Intent i = new Intent(Login.this, MainActivity.class);
                     i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(i);

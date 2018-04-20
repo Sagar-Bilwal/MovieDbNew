@@ -5,8 +5,7 @@
     xmlns:fbutton="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.sagar.moviedb1.Login"
-    android:background="@drawable/gradient">
+    tools:context="com.example.sagar.moviedb1.Login">
 
     <info.hoang8f.widget.FButton
         android:id="@+id/signUp"

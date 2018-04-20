@@ -14,7 +14,11 @@
     <string name="remember_me">Remember Me</string>
     <string name="title_activity_review">ReviewActivity</string>
     <string name="review">Review</string>
-    <string name="author">Author</string>
+    <string name="key">Author</string>
     <string name="written_by">Written By :</string>
     <string name="title_activity_popular_tv">PopularTv</string>
+    <string name="player_error">Error initializing YouTube player: %s</string>
+    <string name="seek_to">Jump To</string>
+    <string name="seek_to_hint">Seconds</string>
+    <string name="title_activity_main2">Main2Activity</string>
 </resources>

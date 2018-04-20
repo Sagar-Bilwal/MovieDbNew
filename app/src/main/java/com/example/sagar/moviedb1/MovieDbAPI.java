@@ -18,9 +18,8 @@ public interface MovieDbAPI
     final String API_Key="d7736b944015d9ad77241f6761abe09a";
     @GET("/3/movie/popular?api_key=d7736b944015d9ad77241f6761abe09a")
     Call<MovieResponse> getMovies();
-    @GET("/3/movie/{MOVIE_ID}/reviews?api_key=d7736b944015d9ad77241f6761abe09a")
+    @GET("/3/movie/{MOVIE_ID}/videos?api_key=d7736b944015d9ad77241f6761abe09a")
     Call<ReviewResponse> getReviews(@Path("MOVIE_ID") String MOVIE_ID);
     @GET("/3/tv/popular?api_key=d7736b944015d9ad77241f6761abe09a")
     Call<TvResponse> getTv();
-
 }
