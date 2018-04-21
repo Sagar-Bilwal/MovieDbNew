@@ -42,7 +42,7 @@ public class ReviewActivity extends YouTubeBaseActivity implements YouTubePlayer
     CrewRecyclerAdapter crewRecyclerAdapter;
     RecommendedRecyclerAdapter recommendedRecyclerAdapter;
 
-
+    String movieUrl;
     ArrayList<Crew> Crews=new ArrayList<>();
     ArrayList<Recommended> Recommends=new ArrayList<>();
     private YouTubePlayerView youTubeView;
@@ -63,8 +63,8 @@ public class ReviewActivity extends YouTubeBaseActivity implements YouTubePlayer
         bundle=intent.getExtras();
         assert bundle != null;
         movieId=bundle.getString("MOVIE_ID","");
-
-
+        movieUrl=bundle.getString("MOVIE_URL","");
+        fetchRecommendations();
         fetchCrews();
 
 
@@ -74,13 +74,11 @@ public class ReviewActivity extends YouTubeBaseActivity implements YouTubePlayer
         recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        fetchRecommendations();
-
         recommendedRecyclerView=findViewById(R.id.recommended_recyclerView);
-        recommendedRecyclerView.setAdapter(recommendedRecyclerAdapter);
         recommendedRecyclerView.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));
         recommendedRecyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
         recommendedRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        recommendedRecyclerView.setAdapter(recommendedRecyclerAdapter);
 
 
         youTubeView = (YouTubePlayerView) findViewById(R.id.youtube_view);
@@ -89,7 +87,7 @@ public class ReviewActivity extends YouTubeBaseActivity implements YouTubePlayer
 
     public void fetchCrews()
     {
-        Call<CrewResponse> call=ApiClient.getInstance().getMovieDbAPI().getCrew(movieId) ;
+        Call<CrewResponse> call=ApiClient.getInstance().getMovieDbAPI().getCrew(movieUrl) ;
         call.enqueue(new Callback<CrewResponse>() {
             @Override
             public void onResponse(@NonNull Call<CrewResponse> call, @NonNull Response<CrewResponse> response) {
@@ -111,12 +109,13 @@ public class ReviewActivity extends YouTubeBaseActivity implements YouTubePlayer
 
     public void fetchRecommendations()
     {
-        Call<RecommendedResponse> call=ApiClient.getInstance().getMovieDbAPI().getRecommended(movieId) ;
+        Call<RecommendedResponse> call=ApiClient.getInstance().getMovieDbAPI().getRecommended(movieUrl) ;
         call.enqueue(new Callback<RecommendedResponse>() {
             @Override
             public void onResponse(@NonNull Call<RecommendedResponse> call, @NonNull Response<RecommendedResponse> response) {
                 RecommendedResponse recommends=response.body();
                 if(recommends!=null) {
+                    Toast.makeText(ReviewActivity.this,recommends.getResults().toString(), Toast.LENGTH_SHORT).show();
                     Recommends.clear();
                     Recommends.addAll(recommends.getResults());
                     recommendedRecyclerAdapter.notifyDataSetChanged();

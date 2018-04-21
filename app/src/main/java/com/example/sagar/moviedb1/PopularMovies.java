@@ -97,11 +97,13 @@ public class PopularMovies extends Fragment implements MovieRecyclerAdapter.onIt
     public void onClick(int position) {
         fetchReview(position);
         int movie_id=Movies.get(position).getId();
+        String movie_url=movie_id+"";
         Intent intent= new Intent(view.getContext(),ReviewActivity.class);
         Bundle bundle=new Bundle();
         if(Reviews.size()!=0) {
             if(check==1) {
-                bundle.putString(MOVIE_ID, (movie_id+""));
+                bundle.putString(MOVIE_ID,Reviews.get(0).getKey());
+                bundle.putString("MOVIE_URL",movie_url);
                 check=0;
                 intent.putExtras(bundle);
                 startActivity(intent);

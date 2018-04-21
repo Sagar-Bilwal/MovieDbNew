@@ -49,10 +49,10 @@ public class PopularTv extends Fragment implements TvRecyclerAdapter.onItemClick
         view = inflater.inflate(R.layout.activity_popular_tv, container, false);
         recyclerView=view.findViewById(R.id.recyclerViewTv);
         movieRecyclerAdapter=new TvRecyclerAdapter(view.getContext(),Movies,this);
-       progressBar=view.findViewById(R.id.progressbarTv);
+        progressBar=view.findViewById(R.id.progressbarTv);
         MainActivity.check=1;
         fetchMovies();
-       progressBar.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
         recyclerView.setAdapter(movieRecyclerAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.HORIZONTAL,false));
         recyclerView.addItemDecoration(new DividerItemDecoration(view.getContext(),DividerItemDecoration.VERTICAL));

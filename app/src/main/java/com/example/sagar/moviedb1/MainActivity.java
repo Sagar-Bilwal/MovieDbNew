@@ -50,14 +50,14 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==R.menu.refresh)
+        if(item.getItemId()==R.id.refresh)
         {
             Toast.makeText(this,"Menu Clicked",Toast.LENGTH_LONG).show();
-            if(check==0)
+            if(check==1)
             {
                 loadFragment(new PopularTv());
             }
-            else if(check==1)
+            else if(check==0)
             {
                 loadFragment(new PopularMovies());
             }
